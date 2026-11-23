@@ -1,0 +1,161 @@
+<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Life Tracker</title><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Life Tracker"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="theme-color" content="#3f7f7a">
+<style>
+:root{--bg:#f3f5f2;--cd:#fff;--tx:#1e2a29;--mu:#6a7a78;--ac:#3f7f7a;--a2:#e1eeeb;--bd:#dde5e2;--er:#b5483a;color-scheme:light}
+:root[data-t=dark]{--bg:#101615;--cd:#19211f;--tx:#e6eeec;--mu:#8a9d9a;--ac:#6fb5ae;--a2:#22322f;--bd:#28352f;--er:#e0806f;color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;padding:env(safe-area-inset-top) 0 0}
+#app{max-width:640px;margin:auto;padding:12px 14px calc(90px + env(safe-area-inset-bottom))}
+h1{font-size:22px;margin:6px 0 10px}h2{font-size:17px;margin:0 0 10px}
+.c{background:var(--cd);border:1px solid var(--bd);border-radius:16px;padding:14px;margin-bottom:12px}
+.mu,small{color:var(--mu)}small{display:block;font-size:13px;margin-top:6px}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{display:block;font-size:13px;color:var(--mu)}
+input,textarea,select{width:100%;font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:10px;margin-top:3px}
+textarea{min-height:80px}
+button{font:inherit;border:0;border-radius:12px;padding:12px 16px;background:var(--ac);color:#fff;min-height:44px}
+button.s{background:var(--a2);color:var(--tx)}button.d{background:transparent;color:var(--er);border:1px solid var(--er)}
+.r{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.r>*{flex:1}
+.hb{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--bd);color:var(--tx);font-size:16px}
+.hb input{width:24px;height:24px;margin:0;flex:none;accent-color:var(--ac)}
+.sc{display:flex;gap:6px;margin:4px 0 10px}.sc button{flex:1;background:var(--a2);color:var(--tx);padding:10px 0}.sc button.on{background:var(--ac);color:#fff}
+nav{position:fixed;bottom:0;inset-inline:0;display:flex;background:var(--cd);border-top:1px solid var(--bd);padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;background:none;color:var(--mu);border-radius:0;font-size:12px;padding:8px 0;min-height:56px}nav button.on{color:var(--ac);font-weight:600}nav b{display:block;font-size:20px}
+.t{font-size:44px;text-align:center;font-variant-numeric:tabular-nums;margin:6px 0}
+.pb{height:10px;background:var(--a2);border-radius:6px;overflow:hidden;margin:8px 0}.pb i{display:block;height:100%;background:var(--ac)}
+.k{background:var(--a2);border-radius:12px;padding:10px}.k b{font-size:22px;display:block}
+.tt{position:fixed;top:calc(10px + env(safe-area-inset-top));inset-inline:14px;background:var(--tx);color:var(--bg);padding:12px;border-radius:12px;z-index:9;text-align:center}.tt.e{background:var(--er);color:#fff}
+.row{display:flex;gap:8px;align-items:center;padding:10px 0;border-top:1px solid var(--bd)}.row>div{flex:1}.row button{flex:none;padding:8px 12px;min-height:40px}
+li{margin-bottom:8px}ul{padding-inline-start:20px;margin:0}
+</style></head><body><div id="app"></div>
+<nav id="nv"></nav>
+<script src="config.js"></script><script src="sync.js"></script>
+<script>
+const H=[['water','שתיית מים מספקת','בריאות וגוף'],['food','תזונה מאוזנת','בריאות וגוף'],['walk','הליכה או פעילות גופנית','בריאות וגוף'],['str','אימון כוח או אימון אחר','בריאות וגוף'],['slp','שמירה על שגרת שינה','בריאות וגוף'],['med','מדיטציה – 10 דקות','התפתחות אישית'],['read','קריאה – 15 דקות','התפתחות אישית'],['nophone','זמן איכות ללא טלפון','התפתחות אישית'],['learn','למידה או רכישת מיומנות','התפתחות אישית'],['me','זמן איכות עם עצמי','רווחה נפשית וחברתית'],['soc','מפגש חברתי או שיחה משמעותית','רווחה נפשית וחברתית'],['fun','פעילות מהנה','רווחה נפשית וחברתית'],['conf','עשיתי משהו שחיזק את הביטחון או העצמאות שלי','רווחה נפשית וחברתית']];
+const SL=[['dur','משך שינה (שעות)'],['score','Sleep Score'],['deep','שינה עמוקה (דק׳)'],['rem','REM (דק׳)'],['awake','ערות בלילה (דק׳)'],['rhr','דופק מנוחה'],['hrv','HRV'],['bb','Body Battery']];
+const MD=[['שחרור מתח','להרפות את הגוף ולהוריד מתח שהצטבר במהלך היום.',['שבו נוח, עצמו עיניים ונשמו 5 נשימות איטיות.','סרקו את הגוף מהמצח עד כפות הרגליים, ובכל אזור מתוח הרפו אותו בנשיפה.','שימו לב לכתפיים, ללסת ולידיים והרפו אותן במיוחד.','בדקות האחרונות רק נשמו ותנו לגוף לנוח.']],['ביטחון עצמי','לחזק תחושה פנימית יציבה של יכולת.',['שבו זקוף ונשמו עמוק כמה פעמים.','היזכרו במצב אחד שהצלחתם בו, קטן ככל שיהיה, והרגישו אותו בגוף.','אמרו לעצמכם בשקט: "אני מסוגל להתמודד".','הישארו עם התחושה עד סוף הזמן.']],['התמודדות עם מחשבות','לראות מחשבות כאירועים חולפים ולא כעובדות.',['התמקדו בנשימה כמה דקות.','כשמחשבה עולה, תנו לה שם קצר: "תכנון", "דאגה", "זיכרון".','חזרו לנשימה ללא ביקורת.','חזרו על כך בכל פעם שהמחשבות מושכות אתכם.']],['נוכחות ברגע','לחזור לכאן ולעכשיו.',['שימו לב לחמישה צלילים סביבכם.','הרגישו את מגע הגוף בכיסא או ברצפה.','עקבו אחרי הנשימה בבטן.','כשהתודעה נודדת, החזירו אותה בעדינות.']],['קבלה עצמית','להתייחס לעצמכם בחום ובהבנה.',['נשמו לאט והניחו יד על החזה.','חשבו על דבר אחד שמאתגר אתכם כרגע.','אמרו לעצמכם: "זה בסדר להיות במקום שאני נמצא בו".','הישארו עם נשימה רגועה עד הסוף.']],['הכרת תודה','לשים לב למה שטוב בחיים.',['נשמו עמוק וצללו פנימה.','חשבו על שלושה דברים טובים מהיום, אפילו פשוטים.','לגבי כל אחד, הרגישו מה הוא מעורר בכם.','סיימו בנשימה ארוכה ובחיוך קטן.']],['רוגע והתבוננות פנימית','לעצור ולבדוק איך אתם באמת.',['שבו בשקט ונשמו בקצב טבעי.','שאלו: "מה אני מרגיש עכשיו?" וחכו לתשובה.','התבוננו ברגש בלי לשנות אותו.','סיימו בנשימה עמוקה ובהודיה לעצמכם על העצירה.']]];
+let db,tab='today',cur=ymd(),rng=7,days=[],goals=[],rec,meta={},hm='',hd='',eg=null,tmr=null,tL=600,tI=null,tE=0;
+function ymd(d){d=d||new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+const addD=(s,n)=>{const d=new Date(s+'T12:00:00');d.setDate(d.getDate()+n);return ymd(d)};
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const num=v=>v===''||v==null?null:+v;
+const avg=a=>{a=a.filter(x=>x!=null&&!isNaN(x));return a.length?a.reduce((x,y)=>x+y,0)/a.length:null};
+const f1=v=>v==null?'—':String(Math.round(v*10)/10);
+const fd=s=>new Date(s+'T12:00:00').toLocaleDateString('he-IL',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+const blank=d=>({date:d,sleep:{},habits:{},mood:null,energy:null,stress:null,weight:null,special:'',notes:''});
+const $=s=>document.querySelector(s);
+function open_(){return new Promise((ok,no)=>{const r=indexedDB.open('lifetracker',1);r.onupgradeneeded=()=>{const d=r.result;d.createObjectStore('days',{keyPath:'date'});d.createObjectStore('goals',{keyPath:'id'});d.createObjectStore('meta',{keyPath:'k'})};r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)})}
+function tx(st,mode,fn){return new Promise((ok,no)=>{const t=db.transaction(st,mode);const o=fn(t);t.oncomplete=()=>ok(o&&o.result);t.onerror=t.onabort=()=>no(t.error||new Error('שגיאת מסד נתונים'))})}
+const all=s=>tx(s,'readonly',t=>t.objectStore(s).getAll());
+const put=(s,v)=>tx(s,'readwrite',t=>t.objectStore(s).put(v));
+const del=(s,k)=>tx(s,'readwrite',t=>t.objectStore(s).delete(k));
+function toast(m,e){const d=document.createElement('div');d.className='tt'+(e?' e':'');d.textContent=m;document.body.appendChild(d);setTimeout(()=>d.remove(),e?6000:2200)}
+function stat(m,e){const s=$('#st');if(s){s.textContent=m;s.style.color=e?'var(--er)':'var(--mu)'}if(e)toast(m,1)}
+async function save(){tmr=null;rec.updatedAt=Date.now();try{await put('days',rec);const i=days.findIndex(d=>d.date===rec.date);if(i<0)days.push(rec);else days[i]=rec;days.sort((a,b)=>a.date<b.date?-1:1);stat('נשמר ✓');LT.sched()}catch(e){stat('השמירה נכשלה: '+e.message+'. ייצאו גיבוי ונסו שוב.',1)}}
+function sched(){stat('שומר…');clearTimeout(tmr);tmr=setTimeout(save,500)}
+async function flush(){if(tmr){clearTimeout(tmr);await save()}}
+async function go(d){await flush();cur=d||ymd();rec=days.find(x=>x.date===cur)||blank(cur);tab='today';render()}
+function setTheme(v){try{localStorage.setItem('lt-theme',v)}catch(e){}applyTheme()}
+function applyTheme(){let v='auto';try{v=localStorage.getItem('lt-theme')||'auto'}catch(e){}const dk=v==='dark'||(v==='auto'&&matchMedia('(prefers-color-scheme:dark)').matches);document.documentElement.dataset.t=dk?'dark':'light'}
+function vToday(){
+const r=rec,s=r.sleep||{},prev=days.filter(d=>d.date<cur&&d.date>=addD(cur,-7));
+const cmp=(k,u)=>{const a=avg(prev.map(d=>d.sleep&&d.sleep[k]));if(a==null)return'';const v=s[k];return `<div>${k==='dur'?'משך שינה':'Sleep Score'}: ממוצע 7 לילות קודמים ${f1(a)}${u}${v!=null?' | הלילה '+f1(v)+' ('+(v-a>=0?'+':'')+f1(v-a)+')':''}</div>`};
+const mi=Math.floor(new Date(cur+'T12:00:00')/864e5)%7,m=MD[mi],sc=(k,l)=>`<label>${l}</label><div class="sc" data-sc="${k}">${[1,2,3,4,5].map(n=>`<button data-n="${n}" class="${r[k]===n?'on':''}">${n}</button>`).join('')}</div>`;
+const lb=meta.lastBackup,old=days.length&&(!lb||Date.now()-lb>7*864e5);
+let hh='',g='';for(const h of H){if(h[2]!==g){g=h[2];hh+=`<h2 style="margin-top:14px;font-size:15px;color:var(--mu)">${g}</h2>`}hh+=`<label class="hb"><input type="checkbox" data-h="${h[0]}" ${r.habits[h[0]]?'checked':''}>${h[1]}</label>`}
+return `<h1>${fd(cur)}</h1>
+${old?'<div class="c" style="background:var(--a2)">עבר זמן מאז הגיבוי האחרון. מומלץ לייצא גיבוי במסך הגדרות.</div>':''}
+<div class="r" style="margin-bottom:12px"><button class="s" data-a="prev">‹ יום קודם</button><input type="date" id="dp" value="${cur}" style="margin:0"><button class="s" data-a="next">יום הבא ›</button></div>
+<div class="c"><h2>בוקר: שינה ו-Garmin</h2><div class="g">${SL.map(([k,l])=>`<label>${l}<input type="number" inputmode="decimal" step="any" data-s="${k}" value="${s[k]!=null?s[k]:''}"></label>`).join('')}</div>
+<label style="margin-top:10px">הערות על איכות השינה<textarea data-s="note">${esc(s.note)}</textarea></label><small>${cmp('dur',' ש׳')}${cmp('score','')||''}</small></div>
+<div class="c"><h2>מדיטציה: ${m[0]}</h2><p class="mu" style="margin:0 0 8px">${m[1]}</p><ol style="padding-inline-start:20px;margin:0 0 8px">${m[2].map(x=>`<li>${x}</li>`).join('')}</ol>
+<div class="t" id="tm">${tf()}</div><div class="r"><button data-a="tstart">${tI?'השהיה':'התחלה'}</button><button class="s" data-a="treset">איפוס</button></div></div>
+<div class="c"><h2>ערב: סיכום היום</h2>${hh}</div>
+<div class="c"><h2>איך היה היום</h2>${sc('mood','מצב רוח (1–5)')}${sc('energy','רמת אנרגיה (1–5)')}${sc('stress','רמת לחץ (1–5)')}
+<label>משקל גוף (ק״ג, אופציונלי)<input type="number" inputmode="decimal" step="any" data-f="weight" value="${r.weight!=null?r.weight:''}"></label>
+<label style="margin-top:10px">פעילות מיוחדת שביצעתי היום<input data-f="special" value="${esc(r.special)}"></label>
+<label style="margin-top:10px">איך עבר עליי היום ומה למדתי ממנו?<textarea data-f="notes">${esc(r.notes)}</textarea></label></div>
+<div id="st" class="mu" style="text-align:center;min-height:24px">${days.some(d=>d.date===cur)?'רשומה שמורה':'השדות אופציונליים. השמירה אוטומטית.'}</div><small id="sy" style="text-align:center">${LT.msg()}</small>`}
+const tf=()=>String(Math.floor(tL/60)).padStart(2,'0')+':'+String(tL%60).padStart(2,'0');
+function tick(){tL=Math.max(0,Math.round((tE-Date.now())/1000));const e=$('#tm');if(e)e.textContent=tf();if(tL<=0){clearInterval(tI);tI=null;tL=600;if(navigator.vibrate)navigator.vibrate([300,100,300]);rec.habits.med=true;sched();toast('המדיטציה הסתיימה. סומנה כבוצעה.');render()}}
+function vHist(){
+let L=days.slice().reverse();if(hm)L=L.filter(d=>d.date.startsWith(hm));if(hd)L=L.filter(d=>d.date===hd);
+return `<h1>היסטוריה</h1><div class="c"><div class="g"><label>חודש<input type="month" id="hm" value="${hm}"></label><label>תאריך<input type="date" id="hdq" value="${hd}"></label></div>
+${hd||hm?'<button class="s" data-a="clr" style="margin-top:10px;width:100%">נקה סינון</button>':''}${hd&&!L.length?`<button data-a="open" data-v="${hd}" style="margin-top:10px;width:100%">אין רשומה. צור רשומה ל-${hd}</button>`:''}</div>
+<div class="c">${L.length?L.map(d=>{const n=H.filter(h=>d.habits&&d.habits[h[0]]).length;return `<div class="row"><div><b>${fd(d.date)}</b><small>${d.sleep&&d.sleep.dur!=null?'שינה '+d.sleep.dur+' ש׳ · ':''}${d.mood?'מצב רוח '+d.mood+' · ':''}${n}/${H.length} הרגלים</small></div><button class="s" data-a="open" data-v="${d.date}">פתח</button><button class="d" data-a="delday" data-v="${d.date}">מחק</button></div>`}).join(''):'<p class="mu">עדיין אין ימים תועדו. מלאו את היום הראשון במסך "היום".</p>'}</div>`}
+function spark(l,vals,u){const p=vals.map((v,i)=>v==null?null:[i,v]).filter(Boolean);if(!p.length)return `<div class="c"><h2>${l}</h2><p class="mu">אין נתונים בטווח</p></div>`;
+const mn=Math.min(...p.map(x=>x[1])),mx=Math.max(...p.map(x=>x[1])),rg=mx-mn||1,n=Math.max(vals.length-1,1);
+const pt=p.map(([i,v])=>[10+i/n*280,60-(v-mn)/rg*50]);
+return `<div class="c"><h2>${l} <span class="mu" style="font-weight:400;font-size:14px">ממוצע ${f1(avg(vals))}${u}</span></h2><svg viewBox="0 0 300 70" width="100%"><polyline fill="none" stroke="var(--ac)" stroke-width="2" points="${pt.map(x=>x.join(',')).join(' ')}"/>${pt.map(x=>`<circle cx="${x[0]}" cy="${x[1]}" r="3" fill="var(--ac)"/>`).join('')}</svg><small>טווח ${f1(mn)}–${f1(mx)}</small></div>`}
+function insights(){
+const out=[],W=['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
+const E=days.filter(d=>d.energy);if(E.length>=10){const b={};E.forEach(d=>{const w=new Date(d.date+'T12:00:00').getDay();(b[w]=b[w]||[]).push(d.energy)});const c=Object.entries(b).filter(x=>x[1].length>=2).map(x=>[x[0],avg(x[1])]).sort((a,b)=>b[1]-a[1])[0];if(c)out.push(`האנרגיה הגבוהה ביותר שדווחה בממוצע היא ביום ${W[c[0]]} (${f1(c[1])} מתוך 5).`)}
+const sm=days.filter(d=>d.mood&&d.sleep&&d.sleep.dur!=null),a=sm.filter(d=>d.sleep.dur>=7),b=sm.filter(d=>d.sleep.dur<7);
+if(a.length>=3&&b.length>=3)out.push(`בימים עם 7 שעות שינה ומעלה מצב הרוח הממוצע היה ${f1(avg(a.map(d=>d.mood)))}, ובימים עם פחות שינה ${f1(avg(b.map(d=>d.mood)))}.`);
+const te=days.filter(d=>d.energy&&d.habits),t1=te.filter(d=>d.habits.str),t0=te.filter(d=>!d.habits.str);
+if(t1.length>=3&&t0.length>=3)out.push(`בימי אימון האנרגיה הממוצעת הייתה ${f1(avg(t1.map(d=>d.energy)))}, ובימים בלי אימון ${f1(avg(t0.map(d=>d.energy)))}.`);
+const hr=days.filter(d=>d.habits&&Object.keys(d.habits).length);if(hr.length>=7){const R=H.map(h=>[h[1],hr.filter(d=>d.habits[h[0]]).length/hr.length]).sort((x,y)=>y[1]-x[1]);out.push(`ההרגל שהכי עקבי אצלך: ${R[0][0]} (${Math.round(R[0][1]*100)}%).`);out.push(`ההרגל שיש בו הכי הרבה מקום לצמוח: ${R[R.length-1][0]} (${Math.round(R[R.length-1][1]*100)}%).`)}
+return out}
+function vStats(){
+const end=ymd(),ds=[];for(let i=rng-1;i>=0;i--)ds.push(addD(end,-i));
+const m=Object.fromEntries(days.map(d=>[d.date,d])),rows=ds.map(d=>m[d]).filter(Boolean),S=k=>rows.map(d=>d.sleep&&d.sleep[k]);
+const hr=rows.filter(d=>Object.keys(d.habits||{}).length),cnt=id=>rows.filter(d=>d.habits&&d.habits[id]).length;
+const comp=avg(hr.map(d=>H.filter(h=>d.habits[h[0]]).length/H.length*100)),ser=f=>ds.map(d=>m[d]?f(m[d]):null);
+const K=(l,v)=>`<div class="k">${l}<b>${v}</b></div>`;
+const ins=insights();
+return `<h1>סטטיסטיקות</h1><div class="r" style="margin-bottom:12px"><button class="${rng===7?'':'s'}" data-a="rng" data-v="7">שבוע</button><button class="${rng===30?'':'s'}" data-a="rng" data-v="30">חודש</button></div>
+${rows.length?'':'<div class="c"><p class="mu">אין עדיין נתונים בטווח. מלאו כמה ימים וכאן יופיעו סיכומים.</p></div>'}
+<div class="c"><h2>סיכום (${rows.length} ימים מתועדים)</h2><div class="g">${K('שינה (ש׳)',f1(avg(S('dur'))))}${K('Sleep Score',f1(avg(S('score'))))}${K('דופק מנוחה',f1(avg(S('rhr'))))}${K('HRV',f1(avg(S('hrv'))))}${K('מצב רוח',f1(avg(rows.map(d=>d.mood))))}${K('אנרגיה',f1(avg(rows.map(d=>d.energy))))}${K('לחץ',f1(avg(rows.map(d=>d.stress))))}${K('השלמת הרגלים',comp==null?'—':Math.round(comp)+'%')}${K('ימי אימון',cnt('str'))}${K('פעילות',rows.filter(d=>d.habits&&(d.habits.walk||d.habits.str)||d.special).length)}${K('מפגשים חברתיים',cnt('soc'))}${K('מדיטציה / קריאה',cnt('med')+' / '+cnt('read'))}</div></div>
+${spark('שעות שינה',ser(d=>d.sleep&&d.sleep.dur),' ש׳')}${spark('Sleep Score',ser(d=>d.sleep&&d.sleep.score),'')}${spark('מצב רוח',ser(d=>d.mood),'')}${spark('אנרגיה',ser(d=>d.energy),'')}${spark('לחץ',ser(d=>d.stress),'')}${spark('משקל',ser(d=>d.weight),' ק״ג')}
+<div class="c"><h2>אחוז הצלחה בכל הרגל</h2>${H.map(h=>{const p=hr.length?Math.round(cnt(h[0])/hr.length*100):0;return `<div style="margin-top:8px">${h[1]} <span class="mu">${p}%</span><div class="pb"><i style="width:${p}%"></i></div></div>`}).join('')}</div>
+<div class="c"><h2>תובנות</h2>${ins.length?'<ul>'+ins.map(x=>`<li>${x}</li>`).join('')+'</ul>':'<p class="mu">התובנות יופיעו אחרי שיצטברו מספיק ימים (בערך שבוע עד שבועיים).</p>'}<small>אלה התאמות בנתונים שלך בלבד. הן לא מוכיחות סיבה ותוצאה, ואינן אבחנה רפואית.</small></div>`}
+function vGoals(){
+const g=eg||{},sg=eg&&eg.id;
+return `<h1>מטרות</h1><div class="c"><h2>${sg?'עריכת מטרה':'מטרה חדשה'}</h2><label>שם<input id="gn" value="${esc(g.name)}"></label><label style="margin-top:8px">תיאור<input id="gd" value="${esc(g.desc)}"></label>
+<div class="g" style="margin-top:8px"><label>יעד מדיד (מספר)<input id="gt" type="number" inputmode="decimal" step="any" value="${g.target!=null?g.target:''}"></label><label>יחידה (ק״ג, אימונים…)<input id="gu" value="${esc(g.unit)}"></label></div>
+<label style="margin-top:8px">תאריך יעד (אופציונלי)<input id="gx" type="date" value="${g.due||''}"></label><div class="r" style="margin-top:10px"><button data-a="gsave">${sg?'שמור שינויים':'הוסף מטרה'}</button>${sg?'<button class="s" data-a="gcancel">ביטול</button>':''}</div>
+<small>למשל "ירידה של 4.5 ק״ג": הגדירו יעד 4.5 ועדכנו כמה כבר הושג. אפשר לשנות מטרה בכל שלב.</small></div>
+${goals.length?goals.map(x=>{const p=x.target?Math.min(100,Math.round((x.current||0)/x.target*100)):0;return `<div class="c"><b>${esc(x.name)}</b><div class="mu">${esc(x.desc)}</div><div class="pb"><i style="width:${p}%"></i></div><div>${f1(x.current||0)} מתוך ${f1(x.target)} ${esc(x.unit)} (${p}%)${x.due?' · עד '+x.due:''}</div><small>${p>=100?'השגת את המטרה. כל הכבוד!':p>0?'יש התקדמות, וזה מה שחשוב.':'כל התחלה נחשבת.'}</small>
+<div class="r" style="margin-top:8px"><button data-a="gup" data-v="${x.id}">עדכון התקדמות</button><button class="s" data-a="gedit" data-v="${x.id}">עריכה</button><button class="d" data-a="gdel" data-v="${x.id}">מחיקה</button></div></div>`}).join(''):'<div class="c"><p class="mu">עדיין אין מטרות. הוסיפו אחת למעלה.</p></div>'}`}
+function vSet(){
+const th=(()=>{try{return localStorage.getItem('lt-theme')||'auto'}catch(e){return'auto'}})();
+return `<h1>הגדרות וגיבוי</h1><div class="c"><h2>גיבוי</h2><p class="mu" style="margin-top:0">${days.length} ימים ו-${goals.length} מטרות שמורים במכשיר הזה. גיבוי אחרון: ${meta.lastBackup?new Date(meta.lastBackup).toLocaleDateString('he-IL'):'טרם בוצע'}.</p>
+<button data-a="exp" style="width:100%">הורדת גיבוי מלא (JSON)</button>
+<label class="s" style="display:block;margin-top:10px;padding:12px;border-radius:12px;background:var(--a2);text-align:center;color:var(--tx)">ייבוא ומיזוג מקובץ גיבוי<input type="file" accept=".json,application/json" data-imp="merge" hidden></label>
+<label style="display:block;margin-top:10px;padding:12px;border-radius:12px;border:1px solid var(--er);text-align:center;color:var(--er)">שחזור מלא (מחליף את כל הנתונים)<input type="file" accept=".json,application/json" data-imp="replace" hidden></label>
+<small>מיזוג לא מוחק כלום: ימים חדשים נוספים, ויום קיים מתעדכן רק אם הרשומה בגיבוי חדשה יותר. כשמחליפים מכשיר או דפדפן, מייבאים את קובץ הגיבוי.</small></div>
+${LT.ui()}<div class="c"><h2>מראה</h2><select id="th"><option value="auto" ${th==='auto'?'selected':''}>אוטומטי</option><option value="light" ${th==='light'?'selected':''}>בהיר</option><option value="dark" ${th==='dark'?'selected':''}>כהה</option></select></div>
+<div class="c"><h2>אחסון</h2><p class="mu" style="margin:0" id="ps">בודק…</p></div>`}
+async function exportAll(){try{const d={app:'life-tracker',version:1,exportedAt:new Date().toISOString(),days,goals};const b=new Blob([JSON.stringify(d,null,1)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='life-tracker-'+ymd()+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);meta.lastBackup=Date.now();await put('meta',{k:'lastBackup',v:meta.lastBackup});toast('הגיבוי הורד. שמרו אותו במקום בטוח (iCloud Drive / Files).');render()}catch(e){toast('הייצוא נכשל: '+e.message,1)}}
+async function doImport(f,mode){if(!f)return;try{const j=JSON.parse(await f.text());if(j.app!=='life-tracker'||!Array.isArray(j.days))throw new Error('הקובץ אינו גיבוי תקין של Life Tracker');
+const D=j.days.filter(d=>d&&/^\d{4}-\d{2}-\d{2}$/.test(d.date)),G=(j.goals||[]).filter(x=>x&&x.id);
+if(mode==='replace'){if(!confirm('שחזור מלא ימחק את כל הנתונים הנוכחיים ויחליף אותם ב-'+D.length+' ימים מהגיבוי. להמשיך?'))return;
+await LT.prep(D,G);await tx(['days','goals'],'readwrite',t=>{t.objectStore('days').clear();t.objectStore('goals').clear();D.forEach(d=>t.objectStore('days').put(d));G.forEach(x=>t.objectStore('goals').put(x))});toast('שוחזרו '+D.length+' ימים')}
+else{let ad=0,up=0,sk=0;const ex=Object.fromEntries(days.map(d=>[d.date,d])),eg_=Object.fromEntries(goals.map(x=>[x.id,x]));
+await tx(['days','goals'],'readwrite',t=>{D.forEach(d=>{const o=ex[d.date];if(!o){ad++;t.objectStore('days').put(d)}else if((d.updatedAt||0)>(o.updatedAt||0)){up++;t.objectStore('days').put(d)}else sk++});G.forEach(x=>{const o=eg_[x.id];if(!o||(x.updatedAt||0)>(o.updatedAt||0))t.objectStore('goals').put(x)})});toast(`מיזוג הושלם: ${ad} חדשים, ${up} עודכנו, ${sk} ללא שינוי`)}
+LT.sched();await loadAll();rec=days.find(d=>d.date===cur)||blank(cur);render()}catch(e){toast('הייבוא נכשל: '+e.message,1)}}
+async function loadAll(){days=(await all('days')).sort((a,b)=>a.date<b.date?-1:1);goals=await all('goals');meta={};(await all('meta')).forEach(m=>meta[m.k]=m.v)}
+function render(){const v={today:vToday,hist:vHist,stats:vStats,goals:vGoals,set:vSet}[tab]();$('#app').innerHTML=v;
+$('#nv').innerHTML=[['today','◐','היום'],['hist','▤','היסטוריה'],['stats','▥','סטטיסטיקות'],['goals','◎','מטרות'],['set','⚙','הגדרות']].map(x=>`<button data-tab="${x[0]}" class="${tab===x[0]?'on':''}"><b>${x[1]}</b>${x[2]}</button>`).join('');
+if(tab==='set')(async()=>{let p=false;try{p=await navigator.storage.persisted()}catch(e){}$('#ps').textContent=p?'האחסון מוגן מפני מחיקה אוטומטית.':'האחסון אינו מסומן כקבוע. התקינו את האפליקציה במסך הבית וגבו באופן קבוע.'})()}
+const A=$('#app');
+A.addEventListener('input',e=>{const t=e.target,D=t.dataset;if(D.s!==undefined){rec.sleep=rec.sleep||{};rec.sleep[D.s]=D.s==='note'?t.value:num(t.value);sched()}else if(D.f){rec[D.f]=t.type==='number'?num(t.value):t.value;sched()}});
+A.addEventListener('change',e=>{const t=e.target,D=t.dataset;if(D.h){rec.habits[D.h]=t.checked;sched()}else if(t.id==='dp'&&t.value)go(t.value);else if(t.id==='hm'){hm=t.value;render()}else if(t.id==='hdq'){hd=t.value;render()}else if(t.id==='th')setTheme(t.value);else if(D.imp){doImport(t.files[0],D.imp);t.value=''}});
+A.addEventListener('click',async e=>{const sb=e.target.closest('.sc button');if(sb){const k=sb.parentNode.dataset.sc,n=+sb.dataset.n;rec[k]=rec[k]===n?null:n;sb.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',+b.dataset.n===rec[k]));sched();return}
+const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,v=b.dataset.v;
+if(a==='prev')go(addD(cur,-1));else if(a==='next')go(addD(cur,1));else if(a==='open')go(v);
+else if(a==='tstart'){if(tI){clearInterval(tI);tI=null;tL=Math.max(0,Math.round((tE-Date.now())/1000))}else{tE=Date.now()+tL*1000;tI=setInterval(tick,250)}render()}
+else if(a==='treset'){clearInterval(tI);tI=null;tL=600;render()}
+else if(a==='clr'){hm='';hd='';render()}
+else if(a==='delday'){if(confirm('למחוק את היום '+fd(v)+' לצמיתות? אי אפשר לשחזר, אלא מגיבוי.')){try{await del('days',v);await LT.tomb('day',v);days=days.filter(d=>d.date!==v);LT.sched();if(cur===v)rec=blank(v);toast('היום נמחק');render()}catch(er){toast('המחיקה נכשלה: '+er.message,1)}}}
+else if(a==='rng'){rng=+v;render()}
+else if(a==='gsave'){const n=$('#gn').value.trim();if(!n){toast('יש להזין שם למטרה',1);return}const o=eg&&eg.id?eg:{id:'g'+Date.now(),current:0};Object.assign(o,{name:n,desc:$('#gd').value.trim(),target:num($('#gt').value),unit:$('#gu').value.trim(),due:$('#gx').value||null,updatedAt:Date.now()});try{await put('goals',o);LT.sched();if(!goals.find(x=>x.id===o.id))goals.push(o);eg=null;toast('המטרה נשמרה');render()}catch(er){toast('השמירה נכשלה: '+er.message,1)}}
+else if(a==='gcancel'){eg=null;render()}
+else if(a==='gedit'){eg=Object.assign({},goals.find(x=>x.id===v));render();scrollTo(0,0)}
+else if(a==='gup'){const o=goals.find(x=>x.id===v),r=prompt('כמה הושג עד עכשיו? ('+(o.unit||'ערך')+')',o.current||0);if(r===null||isNaN(+r)||r.trim()==='')return;o.current=+r;o.updatedAt=Date.now();try{await put('goals',o);LT.sched();render()}catch(er){toast('השמירה נכשלה: '+er.message,1)}}
+else if(a==='gdel'){if(confirm('למחוק את המטרה?')){try{await del('goals',v);await LT.tomb('goal',v);LT.sched();goals=goals.filter(x=>x.id!==v);render()}catch(er){toast('המחיקה נכשלה: '+er.message,1)}}}
+else if(a==='exp')exportAll();else if(a.startsWith('lt'))LT.act(a)});
+$('#nv').addEventListener('click',async e=>{const b=e.target.closest('[data-tab]');if(!b)return;await flush();tab=b.dataset.tab;render();scrollTo(0,0)});
+addEventListener('pagehide',()=>{if(tmr)save()});document.addEventListener('visibilitychange',()=>{if(document.hidden&&tmr){clearTimeout(tmr);save()}});
+(async()=>{applyTheme();try{db=await open_();await loadAll();try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}rec=days.find(d=>d.date===cur)||blank(cur);render();LT.start()}catch(e){$('#app').innerHTML='<div class="c"><h2>לא ניתן לפתוח את אחסון הנתונים</h2><p>'+esc(e.message)+'</p><p>ודאו שאתם לא בגלישה פרטית ושהאחסון בדפדפן מופעל, ואז רעננו.</p></div>'}
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{})})();
+</script></body></html>

@@ -1,0 +1,2 @@
+// הדביקו כאן את הערכים מ-Supabase (Project URL ו-anon/publishable key). המפתח הזה ציבורי מטבעו; הגנת הנתונים נעשית ב-RLS.
+window.LT_CONFIG={url:'https://frapxegbyeuouqzokfti.supabase.co',key:'sb_publishable_7SnQ_29SFtV9IOjI4EpZXg_lCLSq1xq'};
