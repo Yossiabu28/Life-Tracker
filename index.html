@@ -30,18 +30,57 @@ li{margin-bottom:8px}ul{padding-inline-start:20px;margin:0}
 <nav id="nv"></nav>
 <script src="config.js"></script><script src="sync.js"></script>
 <script>
-const H=[['water','שתיית מים מספקת','בריאות וגוף'],['food','תזונה מאוזנת','בריאות וגוף'],['walk','הליכה או פעילות גופנית','בריאות וגוף'],['str','אימון כוח או אימון אחר','בריאות וגוף'],['slp','שמירה על שגרת שינה','בריאות וגוף'],['med','מדיטציה – 10 דקות','התפתחות אישית'],['read','קריאה – 15 דקות','התפתחות אישית'],['nophone','זמן איכות ללא טלפון','התפתחות אישית'],['learn','למידה או רכישת מיומנות','התפתחות אישית'],['me','זמן איכות עם עצמי','רווחה נפשית וחברתית'],['soc','מפגש חברתי או שיחה משמעותית','רווחה נפשית וחברתית'],['fun','פעילות מהנה','רווחה נפשית וחברתית'],['conf','עשיתי משהו שחיזק את הביטחון או העצמאות שלי','רווחה נפשית וחברתית']];
-const SL=[['dur','משך שינה (שעות)'],['score','Sleep Score'],['deep','שינה עמוקה (דק׳)'],['rem','REM (דק׳)'],['awake','ערות בלילה (דק׳)'],['rhr','דופק מנוחה'],['hrv','HRV'],['bb','Body Battery']];
+const H=[['water','שתיית מים מספקת','בריאות וגוף'],['food','תזונה מאוזנת','בריאות וגוף'],['walk','הליכה או פעילות גופנית','בריאות וגוף'],['str','אימון כוח או אימון אחר','בריאות וגוף'],['slp','שמירה על שגרת שינה','בריאות וגוף'],['back','תרגילים לגב','בריאות וגוף'],['med','מדיטציה – 10 דקות','התפתחות אישית'],['read','קריאה – 15 דקות','התפתחות אישית'],['nophone','זמן איכות ללא טלפון','התפתחות אישית'],['learn','למידה או רכישת מיומנות','התפתחות אישית'],['goal','פעולה למען מטרה אישית','התפתחות אישית'],['me','זמן איכות עם עצמי','רווחה נפשית וחברתית'],['soc','מפגש חברתי או שיחה משמעותית','רווחה נפשית וחברתית'],['fun','פעילות מהנה','רווחה נפשית וחברתית'],['conf','עשיתי משהו שחיזק את הביטחון או העצמאות שלי','רווחה נפשית וחברתית'],['new','עשיתי משהו חדש או שונה','רווחה נפשית וחברתית'],['dodge','עשיתי משהו שדחיתי','רווחה נפשית וחברתית']];
+const SL=[['dur','משך שינה (למשל 5:25)'],['bed','שעת שינה'],['wake','שעת קימה'],['score','Sleep Score'],['deep','שינה עמוקה (דק׳)'],['rem','REM (דק׳)'],['awake','ערות בלילה (דק׳)'],['rhr','דופק מנוחה'],['hrv','HRV'],['bb','Body Battery: עלייה בלילה'],['bb0','Body Battery: ערך בוקר']];
 const MD=[['שחרור מתח','להרפות את הגוף ולהוריד מתח שהצטבר במהלך היום.',['שבו נוח, עצמו עיניים ונשמו 5 נשימות איטיות.','סרקו את הגוף מהמצח עד כפות הרגליים, ובכל אזור מתוח הרפו אותו בנשיפה.','שימו לב לכתפיים, ללסת ולידיים והרפו אותן במיוחד.','בדקות האחרונות רק נשמו ותנו לגוף לנוח.']],['ביטחון עצמי','לחזק תחושה פנימית יציבה של יכולת.',['שבו זקוף ונשמו עמוק כמה פעמים.','היזכרו במצב אחד שהצלחתם בו, קטן ככל שיהיה, והרגישו אותו בגוף.','אמרו לעצמכם בשקט: "אני מסוגל להתמודד".','הישארו עם התחושה עד סוף הזמן.']],['התמודדות עם מחשבות','לראות מחשבות כאירועים חולפים ולא כעובדות.',['התמקדו בנשימה כמה דקות.','כשמחשבה עולה, תנו לה שם קצר: "תכנון", "דאגה", "זיכרון".','חזרו לנשימה ללא ביקורת.','חזרו על כך בכל פעם שהמחשבות מושכות אתכם.']],['נוכחות ברגע','לחזור לכאן ולעכשיו.',['שימו לב לחמישה צלילים סביבכם.','הרגישו את מגע הגוף בכיסא או ברצפה.','עקבו אחרי הנשימה בבטן.','כשהתודעה נודדת, החזירו אותה בעדינות.']],['קבלה עצמית','להתייחס לעצמכם בחום ובהבנה.',['נשמו לאט והניחו יד על החזה.','חשבו על דבר אחד שמאתגר אתכם כרגע.','אמרו לעצמכם: "זה בסדר להיות במקום שאני נמצא בו".','הישארו עם נשימה רגועה עד הסוף.']],['הכרת תודה','לשים לב למה שטוב בחיים.',['נשמו עמוק וצללו פנימה.','חשבו על שלושה דברים טובים מהיום, אפילו פשוטים.','לגבי כל אחד, הרגישו מה הוא מעורר בכם.','סיימו בנשימה ארוכה ובחיוך קטן.']],['רוגע והתבוננות פנימית','לעצור ולבדוק איך אתם באמת.',['שבו בשקט ונשמו בקצב טבעי.','שאלו: "מה אני מרגיש עכשיו?" וחכו לתשובה.','התבוננו ברגש בלי לשנות אותו.','סיימו בנשימה עמוקה ובהודיה לעצמכם על העצירה.']]];
-let db,tab='today',cur=ymd(),rng=7,days=[],goals=[],rec,meta={},hm='',hd='',eg=null,tmr=null,tL=600,tI=null,tE=0;
+const GQ=['מה עבר עליי היום?','מה העסיק אותי?','מה היה רגע טוב?','מה היה קשה?','מה למדתי על עצמי?','האם התנהלתי מתוך פחד או מתוך רצון?','האם עשיתי משהו בשביל עצמי?','מה אני רוצה לקחת למחר?'];
+const EX=['לטייל במקום שלא הייתם בו','לצאת לקפה עם חבר שלא ראיתם הרבה זמן','לנסות מסעדה או אוכל חדש','לצאת לבד לפעילות שאתם אוהבים','להצטרף לפעילות חברתית חדשה','לעשות משהו שדחיתם כבר הרבה זמן'];
+const DM=[['כל פעולה היא הצבעה','לפי Atomic Habits, הזהות נבנית מחזרות קטנות: כל פעם שאתה עושה את ההרגל, אתה מחזק את הדימוי של מי שאתה הופך להיות.','ספר: Atomic Habits (James Clear), בניסוח שלי','עשו היום את הגרסה הקטנה ביותר של הרגל אחד, אפילו שתי דקות.'],
+['לא הכול ייכנס','Four Thousand Weeks (Oliver Burkeman) טוען שהזמן מוגבל, ושהרגיעה באה מבחירה במה לוותר עליו ולא מניסיון לעשות הכול.','ספר: Four Thousand Weeks (Oliver Burkeman), בניסוח שלי','בחרו דבר אחד שלא תעשו היום, בכוונה.'],
+['חוויות הן השקעה','Die With Zero (Bill Perkins) מציע לא לדחות הכול לעתיד: יש חוויות שכדאי לעשות בגיל הנכון, והזיכרונות נשארים שנים.','ספר: Die With Zero (Bill Perkins), בניסוח שלי','תכננו חוויה אחת לשבוע הקרוב, גם קטנה וזולה.'],
+['כסף כחופש','The Psychology of Money (Morgan Housel) מדגיש שאחד היתרונות הגדולים של כסף הוא השליטה בזמן שלך.','ספר: The Psychology of Money (Morgan Housel), בניסוח שלי','שאלו: מה הכסף שלי קונה לי מבחינת חופש וחוויות?'],
+['משמעות עוזרת לשאת קושי','Viktor Frankl ב-Man’s Search for Meaning כותב שתחושת משמעות יכולה לעזור להתמודד גם עם קושי גדול.','ספר: Man’s Search for Meaning (Viktor Frankl), בניסוח שלי','כתבו במשפט אחד מה נותן ליום הזה משמעות.'],
+['מחשבה היא לא עובדה','בגישת ACT מתבוננים במחשבות כאירועים בראש ולא כאמיתות, ופועלים לפי מה שחשוב לך גם כשיש אי נוחות.','שיטה טיפולית: ACT, בניסוח שלי','כשעולה מחשבה קשה, אמרו: "אני שם לב שיש לי מחשבה ש…".'],
+['ביטחון בא אחרי פעולה','Russ Harris ב-The Confidence Gap טוען שלא מחכים להרגיש ביטחון: פועלים למרות הפחד, והביטחון נבנה מהניסיון.','ספר: The Confidence Gap (Russ Harris), בניסוח שלי','עשו 5 דקות של דבר שאתם דוחים.'],
+['מי שמתבונן במחשבות','Michael Singer ב-The Untethered Soul מבחין בין הקול הפנימי לבין מי שמקשיב לו. התבוננות יכולה להפחית היסחפות אחרי מחשבות.','ספר: The Untethered Soul (Michael Singer), בניסוח שלי','במשך דקה, האזינו לקול הפנימי כאילו הוא של מישהו אחר.'],
+['לבדוק מה באמת קרה','ב-CBT בודקים את הקשר בין מחשבה, רגש והתנהגות, ושואלים אילו עדויות תומכות במחשבה ואילו סותרות אותה.','שיטה טיפולית: CBT, בניסוח שלי','כתבו מחשבה מטרידה אחת, ושתי עדויות בעד ושתיים נגד.'],
+['הישגים קטנים נחשבים','התקדמות מורכבת מצעדים קטנים. כשמכירים בהם, הערכה עצמית נבנית ממעשים ולא ממחמאות.','רעיון לחשיבה, לא מחקר','כתבו דבר אחד שעשיתם השבוע ואתם גאים בו.'],
+['ערך שלא תלוי באישור','כשאתם מחפשים אישור, עצרו ובדקו אם החלטתם לפי מה שחשוב לכם. ערך עצמי יכול להישען על מעשים ועל ערכים.','רעיון לחשיבה, לא מחקר','קבלו היום החלטה קטנה אחת בלי לשאול אף אחד.'],
+['שינה כבסיס','הנחיות שינה מקובלות ממליצות על שעות קבועות. עקביות מקלה על אנרגיה ועל מצב רוח, אבל כל אדם שונה.','עיקרון מקובל, לא מחקר ספציפי','נסו לשמור מחר על אותה שעת שינה כמו היום.']];
+const di=s=>Math.floor(new Date(s+'T12:00:00')/864e5);
+const dmCard=s=>{const m=DM[di(s)%DM.length];return `<div class="c" style="background:var(--a2)"><small style="margin:0">המסר היומי · ${m[2]}</small><b>${m[0]}</b><p style="margin:6px 0">${m[1]}</p><p style="margin:0"><b>פעולה להיום:</b> ${m[3]}</p></div>`};
+const HZ={d30:'30 יום',d90:'90 יום',y:'שנה',l:'ארוך טווח'};
+function coach(){
+const e=ymd(),m=Object.fromEntries(days.map(d=>[d.date,d])),W=(a,b)=>{const r=[];for(let i=a;i<b;i++){const d=m[addD(e,-i)];if(d)r.push(d)}return r},A=W(0,7),B=W(7,14);
+const T=c=>`<div class="c"><h2>סיכום שבועי של המאמן</h2>${c}</div>`;
+if(A.length<3)return T('<p class="mu" style="margin:0">צריך לפחות 3 ימים מתועדים בשבוע האחרון כדי לנתח. אין ניתוח כשאין נתונים.</p>');
+const hasH=R=>R.filter(d=>Object.keys(d.habits||{}).length),hA=hasH(A),cn=(R,id)=>R.filter(d=>d.habits&&d.habits[id]).length;
+const pc=R=>{const x=hasH(R);return x.length?avg(x.map(d=>H.filter(h=>d.habits[h[0]]).length/H.length*100)):null};
+const dl=(a,b,u)=>a==null||b==null?'':` (${a-b>=0?'+':''}${f1(a-b)}${u} לעומת שבוע קודם)`;
+const good=H.filter(h=>hA.length&&cn(hA,h[0])/hA.length>=.6).map(h=>h[1]).slice(0,5);
+const G=['בריאות וגוף','התפתחות אישית','רווחה נפשית וחברתית'].map(g=>{const ids=H.filter(h=>h[2]===g);return[g,hA.length?avg(hA.map(d=>ids.filter(h=>d.habits[h[0]]).length/ids.length*100)):0]}).sort((a,b)=>a[1]-b[1]);
+const sl=avg(A.map(d=>d.sleep&&d.sleep.dur)),en=avg(A.map(d=>d.energy)),st=avg(A.map(d=>d.stress)),md=avg(A.map(d=>d.mood)),att=[];
+if(G[0][1]<40)att.push(`תחום "${G[0][0]}" קיבל מעט תשומת לב השבוע.`);
+if(hA.length&&!cn(hA,'soc'))att.push('לא תועד מפגש חברתי או שיחה משמעותית השבוע.');
+if(hA.length&&!cn(hA,'new')&&!A.some(d=>d.exp))att.push('לא תועדה חוויה חדשה השבוע.');
+if(sl!=null&&sl<6.5&&en!=null&&en<3)att.push('שינה קצרה (ממוצע '+fdur(sl)+') לצד אנרגיה נמוכה. ייתכן קשר, ושווה לנסות להקדים שינה בכמה ימים.');
+if(st!=null&&st>=4)att.push('רמת לחץ גבוהה בממוצע ('+f1(st)+' מתוך 5). אולי כדאי להוריד עומס או להאריך מדיטציה.');
+const pr=A.filter(d=>d.proud).slice(0,2).map(d=>esc(d.proud)),low=H.find(h=>h[2]===G[0][0]&&hA.length&&!cn(hA,h[0]));
+return T(`<b>מה עשיתי טוב</b><p style="margin:4px 0 10px">${good.length?good.join(', ')+'.':'עדיין אין הרגל עקבי, וזה בסדר. עצם התיעוד הוא התחלה.'}${pr.length?' דברים שציינת שאתה גאה בהם: '+pr.join(' · '):''}</p>
+<b>התקדמות לעומת שבוע קודם</b><p style="margin:4px 0 10px">שינה ${sl==null?'—':fdur(sl)}${dl(sl,avg(B.map(d=>d.sleep&&d.sleep.dur)),' ש׳')}. מצב רוח ${f1(md)}${dl(md,avg(B.map(d=>d.mood)),'')}. אנרגיה ${f1(en)}${dl(en,avg(B.map(d=>d.energy)),'')}.</p>
+<b>מה דורש תשומת לב</b>${att.length?'<ul style="margin:4px 0 10px">'+att.slice(0,3).map(x=>`<li>${x}</li>`).join('')+'</ul>':'<p style="margin:4px 0 10px">לא זוהה משהו חריג. המשיכו כך.</p>'}
+<b>לשבוע הבא</b><p style="margin:4px 0 0">${low?`נסו לבצע "${low[1]}" לפחות 3 פעמים. `:''}חוויה להכניס: ${EX[Math.floor(Date.now()/6048e5)%EX.length]}.</p><small>אלה התאמות בנתונים שלך, לא אבחנה ולא הוכחה לסיבה ותוצאה.</small>`)}
+let db,tab='today',cur=ymd(),rng=7,days=[],goals=[],rec,meta={},hm='',hd='',hq='',te=false,ts=new Date().getHours()<15?'m':'e',eg=null,tmr=null,tL=600,tI=null,tE=0;
 function ymd(d){d=d||new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 const addD=(s,n)=>{const d=new Date(s+'T12:00:00');d.setDate(d.getDate()+n);return ymd(d)};
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const num=v=>v===''||v==null?null:+v;
 const avg=a=>{a=a.filter(x=>x!=null&&!isNaN(x));return a.length?a.reduce((x,y)=>x+y,0)/a.length:null};
 const f1=v=>v==null?'—':String(Math.round(v*10)/10);
+const pdur=v=>{v=String(v).trim();if(!v)return null;let x,h,m=0;if(x=v.match(/^(\d{1,2})\s*[:.,\s]\s*(\d{2})$/)){h=+x[1];m=+x[2]}else if(x=v.match(/^(\d{1,2})$/)){h=+x[1]}else if(x=v.match(/^(\d)(\d{2})$/)){h=+x[1];m=+x[2]}else if(x=v.match(/^(\d{2})(\d{2})$/)){h=+x[1];m=+x[2]}else return NaN;return m>59||h>24?NaN:h+m/60};
+const fdur=v=>{if(v==null||v==='')return'';const t=Math.round(v*60);return Math.floor(t/60)+':'+String(t%60).padStart(2,'0')};
 const fd=s=>new Date(s+'T12:00:00').toLocaleDateString('he-IL',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-const blank=d=>({date:d,sleep:{},habits:{},mood:null,energy:null,stress:null,weight:null,special:'',notes:''});
+const blank=d=>({date:d,sleep:{},habits:{},mood:null,energy:null,stress:null,weight:null,special:'',notes:'',proud:'',exp:''});
 const $=s=>document.querySelector(s);
 function open_(){return new Promise((ok,no)=>{const r=indexedDB.open('lifetracker',1);r.onupgradeneeded=()=>{const d=r.result;d.createObjectStore('days',{keyPath:'date'});d.createObjectStore('goals',{keyPath:'id'});d.createObjectStore('meta',{keyPath:'k'})};r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)})}
 function tx(st,mode,fn){return new Promise((ok,no)=>{const t=db.transaction(st,mode);const o=fn(t);t.oncomplete=()=>ok(o&&o.result);t.onerror=t.onabort=()=>no(t.error||new Error('שגיאת מסד נתונים'))})}
@@ -56,36 +95,42 @@ async function flush(){if(tmr){clearTimeout(tmr);await save()}}
 async function go(d){await flush();cur=d||ymd();rec=days.find(x=>x.date===cur)||blank(cur);tab='today';render()}
 function setTheme(v){try{localStorage.setItem('lt-theme',v)}catch(e){}applyTheme()}
 function applyTheme(){let v='auto';try{v=localStorage.getItem('lt-theme')||'auto'}catch(e){}const dk=v==='dark'||(v==='auto'&&matchMedia('(prefers-color-scheme:dark)').matches);document.documentElement.dataset.t=dk?'dark':'light'}
+const tasks=()=>goals.filter(x=>x.kind==='task').sort((a,b)=>(a.order||0)-(b.order||0));
+const tk=()=>{const t=tasks();return t.length?t.filter(x=>rec.habits[x.id]).length+'/'+t.length:''};
+function vTasks(){const t=tasks();
+return `<div class="c"><h2>המשימות שלי</h2>${t.length?t.map((x,i)=>te?`<div class="row"><div><input data-tn="${x.id}" value="${esc(x.name)}"></div><button class="s" data-a="tup" data-v="${x.id}" ${i?'':'disabled'}>↑</button><button class="s" data-a="tdn" data-v="${x.id}" ${i<t.length-1?'':'disabled'}>↓</button><button class="d" data-a="tdel" data-v="${x.id}">מחק</button></div>`:`<label class="hb"><input type="checkbox" data-h="${x.id}" ${rec.habits[x.id]?'checked':''}>${esc(x.name)}</label>`).join(''):'<p class="mu" style="margin:0">עדיין אין משימות. הוסיפו את הראשונה, למשל "קריאת ספר 15 דקות".</p>'}
+<div class="r" style="margin-top:12px"><input id="tnew" placeholder="משימה חדשה" style="margin:0"><button data-a="tadd" style="flex:none">הוסף</button></div>
+<button class="s" data-a="ted" style="width:100%;margin-top:10px">${te?'סיום עריכה':'עריכה וסידור'}</button><small>המשימות חוזרות בכל יום באותו סדר. אפשר לשנות שם, לסדר מחדש ולמחוק. הסימון נשמר בנפרד לכל יום.</small></div>`}
 function vToday(){
 const r=rec,s=r.sleep||{},prev=days.filter(d=>d.date<cur&&d.date>=addD(cur,-7));
-const cmp=(k,u)=>{const a=avg(prev.map(d=>d.sleep&&d.sleep[k]));if(a==null)return'';const v=s[k];return `<div>${k==='dur'?'משך שינה':'Sleep Score'}: ממוצע 7 לילות קודמים ${f1(a)}${u}${v!=null?' | הלילה '+f1(v)+' ('+(v-a>=0?'+':'')+f1(v-a)+')':''}</div>`};
+const cmp=(k,u)=>{const a=avg(prev.map(d=>d.sleep&&d.sleep[k]));if(a==null)return'';const v=s[k],D=k==='dur',F=D?fdur:f1,df=v!=null?(D?Math.round((v-a)*60)+' דק׳':f1(v-a)):'';return `<div>${D?'משך שינה':'Sleep Score'}: ממוצע 7 לילות קודמים ${F(a)}${D?'':u}${v!=null?' | הלילה '+F(v)+' ('+(v-a>=0?'+':'')+df+')':''}</div>`};
 const mi=Math.floor(new Date(cur+'T12:00:00')/864e5)%7,m=MD[mi],sc=(k,l)=>`<label>${l}</label><div class="sc" data-sc="${k}">${[1,2,3,4,5].map(n=>`<button data-n="${n}" class="${r[k]===n?'on':''}">${n}</button>`).join('')}</div>`;
 const lb=meta.lastBackup,old=days.length&&(!lb||Date.now()-lb>7*864e5);
 let hh='',g='';for(const h of H){if(h[2]!==g){g=h[2];hh+=`<h2 style="margin-top:14px;font-size:15px;color:var(--mu)">${g}</h2>`}hh+=`<label class="hb"><input type="checkbox" data-h="${h[0]}" ${r.habits[h[0]]?'checked':''}>${h[1]}</label>`}
 return `<h1>${fd(cur)}</h1>
 ${old?'<div class="c" style="background:var(--a2)">עבר זמן מאז הגיבוי האחרון. מומלץ לייצא גיבוי במסך הגדרות.</div>':''}
 <div class="r" style="margin-bottom:12px"><button class="s" data-a="prev">‹ יום קודם</button><input type="date" id="dp" value="${cur}" style="margin:0"><button class="s" data-a="next">יום הבא ›</button></div>
-<div class="c"><h2>בוקר: שינה ו-Garmin</h2><div class="g">${SL.map(([k,l])=>`<label>${l}<input type="number" inputmode="decimal" step="any" data-s="${k}" value="${s[k]!=null?s[k]:''}"></label>`).join('')}</div>
-<label style="margin-top:10px">הערות על איכות השינה<textarea data-s="note">${esc(s.note)}</textarea></label><small>${cmp('dur',' ש׳')}${cmp('score','')||''}</small></div>
+<div class="r" style="margin-bottom:12px"><button class="${ts==='m'?'':'s'}" data-a="ts" data-v="m">בוקר</button><button class="${ts==='e'?'':'s'}" data-a="ts" data-v="e">ערב</button><button class="${ts==='t'?'':'s'}" data-a="ts" data-v="t">משימות ${tk()}</button></div>${ts==='m'?`${dmCard(cur)}<div class="c"><h2>בוקר: שינה ו-Garmin</h2><div class="g">${SL.map(([k,l])=>`<label>${l}<input ${k==='dur'?'type="text" inputmode="text" placeholder="5:25" autocomplete="off"':(k==='bed'||k==='wake')?'type="time"':'type="number" inputmode="decimal" step="any"'} data-s="${k}" value="${k==='dur'?fdur(s[k]):(s[k]!=null?s[k]:'')}"></label>`).join('')}</div>
+<label style="margin-top:10px">הערות על איכות השינה<textarea data-s="note">${esc(s.note)}</textarea></label><div style="margin-top:10px"><small style="margin:0 0 4px">אתמול בערב (אופציונלי)</small>${[['fcaf','קפאין אחר הצהריים'],['falc','אלכוהול'],['fscr','מסך לפני השינה'],['fmeal','ארוחה מאוחרת']].map(([k,l])=>`<label class="hb"><input type="checkbox" data-h="${k}" ${r.habits[k]?'checked':''}>${l}</label>`).join('')}</div><small>${cmp('dur',' ש׳')}${cmp('score','')||''}</small></div>
 <div class="c"><h2>מדיטציה: ${m[0]}</h2><p class="mu" style="margin:0 0 8px">${m[1]}</p><ol style="padding-inline-start:20px;margin:0 0 8px">${m[2].map(x=>`<li>${x}</li>`).join('')}</ol>
 <div class="t" id="tm">${tf()}</div><div class="r"><button data-a="tstart">${tI?'השהיה':'התחלה'}</button><button class="s" data-a="treset">איפוס</button></div></div>
-<div class="c"><h2>ערב: סיכום היום</h2>${hh}</div>
+`:ts==='t'?vTasks():`<div class="c"><h2>ערב: סיכום היום</h2>${hh}</div>
 <div class="c"><h2>איך היה היום</h2>${sc('mood','מצב רוח (1–5)')}${sc('energy','רמת אנרגיה (1–5)')}${sc('stress','רמת לחץ (1–5)')}
 <label>משקל גוף (ק״ג, אופציונלי)<input type="number" inputmode="decimal" step="any" data-f="weight" value="${r.weight!=null?r.weight:''}"></label>
 <label style="margin-top:10px">פעילות מיוחדת שביצעתי היום<input data-f="special" value="${esc(r.special)}"></label>
-<label style="margin-top:10px">איך עבר עליי היום ומה למדתי ממנו?<textarea data-f="notes">${esc(r.notes)}</textarea></label></div>
+<label style="margin-top:10px">משהו שעשיתי היום ואני גאה בו<input data-f="proud" value="${esc(r.proud)}"></label><label style="margin-top:10px">חוויה או רגע שאני רוצה לזכור<input data-f="exp" value="${esc(r.exp)}"></label><small>שאלה מנחה: ${GQ[di(cur)%GQ.length]}</small><label style="margin-top:10px">איך עבר עליי היום ומה למדתי ממנו?<textarea data-f="notes">${esc(r.notes)}</textarea></label></div>`}
 <div id="st" class="mu" style="text-align:center;min-height:24px">${days.some(d=>d.date===cur)?'רשומה שמורה':'השדות אופציונליים. השמירה אוטומטית.'}</div><small id="sy" style="text-align:center">${LT.msg()}</small>`}
 const tf=()=>String(Math.floor(tL/60)).padStart(2,'0')+':'+String(tL%60).padStart(2,'0');
 function tick(){tL=Math.max(0,Math.round((tE-Date.now())/1000));const e=$('#tm');if(e)e.textContent=tf();if(tL<=0){clearInterval(tI);tI=null;tL=600;if(navigator.vibrate)navigator.vibrate([300,100,300]);rec.habits.med=true;sched();toast('המדיטציה הסתיימה. סומנה כבוצעה.');render()}}
 function vHist(){
-let L=days.slice().reverse();if(hm)L=L.filter(d=>d.date.startsWith(hm));if(hd)L=L.filter(d=>d.date===hd);
-return `<h1>היסטוריה</h1><div class="c"><div class="g"><label>חודש<input type="month" id="hm" value="${hm}"></label><label>תאריך<input type="date" id="hdq" value="${hd}"></label></div>
-${hd||hm?'<button class="s" data-a="clr" style="margin-top:10px;width:100%">נקה סינון</button>':''}${hd&&!L.length?`<button data-a="open" data-v="${hd}" style="margin-top:10px;width:100%">אין רשומה. צור רשומה ל-${hd}</button>`:''}</div>
-<div class="c">${L.length?L.map(d=>{const n=H.filter(h=>d.habits&&d.habits[h[0]]).length;return `<div class="row"><div><b>${fd(d.date)}</b><small>${d.sleep&&d.sleep.dur!=null?'שינה '+d.sleep.dur+' ש׳ · ':''}${d.mood?'מצב רוח '+d.mood+' · ':''}${n}/${H.length} הרגלים</small></div><button class="s" data-a="open" data-v="${d.date}">פתח</button><button class="d" data-a="delday" data-v="${d.date}">מחק</button></div>`}).join(''):'<p class="mu">עדיין אין ימים תועדו. מלאו את היום הראשון במסך "היום".</p>'}</div>`}
-function spark(l,vals,u){const p=vals.map((v,i)=>v==null?null:[i,v]).filter(Boolean);if(!p.length)return `<div class="c"><h2>${l}</h2><p class="mu">אין נתונים בטווח</p></div>`;
+let L=days.slice().reverse();if(hm)L=L.filter(d=>d.date.startsWith(hm));if(hd)L=L.filter(d=>d.date===hd);if(hq)L=L.filter(d=>[d.notes,d.proud,d.exp,d.special,d.sleep&&d.sleep.note].join(' ').includes(hq));
+return `<h1>היסטוריה</h1><div class="c"><div class="g"><label>חודש<input type="month" id="hm" value="${hm}"></label><label>תאריך<input type="date" id="hdq" value="${hd}"></label></div><label style="margin-top:10px">חיפוש בטקסט (יומן והערות)<input type="search" id="hq" value="${esc(hq)}"></label>
+${hd||hm||hq?'<button class="s" data-a="clr" style="margin-top:10px;width:100%">נקה סינון</button>':''}${hd&&!L.length?`<button data-a="open" data-v="${hd}" style="margin-top:10px;width:100%">אין רשומה. צור רשומה ל-${hd}</button>`:''}</div>
+<div class="c">${L.length?L.map(d=>{const n=H.filter(h=>d.habits&&d.habits[h[0]]).length;return `<div class="row"><div><b>${fd(d.date)}</b><small>${d.sleep&&d.sleep.dur!=null?'שינה '+fdur(d.sleep.dur)+' ש׳ · ':''}${d.mood?'מצב רוח '+d.mood+' · ':''}${n}/${H.length} הרגלים</small></div><button class="s" data-a="open" data-v="${d.date}">פתח</button><button class="d" data-a="delday" data-v="${d.date}">מחק</button></div>`}).join(''):'<p class="mu">עדיין אין ימים תועדו. מלאו את היום הראשון במסך "היום".</p>'}</div>`}
+function spark(l,vals,u){const F=l==='שעות שינה'?v=>fdur(v)||'—':f1;const p=vals.map((v,i)=>v==null?null:[i,v]).filter(Boolean);if(!p.length)return `<div class="c"><h2>${l}</h2><p class="mu">אין נתונים בטווח</p></div>`;
 const mn=Math.min(...p.map(x=>x[1])),mx=Math.max(...p.map(x=>x[1])),rg=mx-mn||1,n=Math.max(vals.length-1,1);
 const pt=p.map(([i,v])=>[10+i/n*280,60-(v-mn)/rg*50]);
-return `<div class="c"><h2>${l} <span class="mu" style="font-weight:400;font-size:14px">ממוצע ${f1(avg(vals))}${u}</span></h2><svg viewBox="0 0 300 70" width="100%"><polyline fill="none" stroke="var(--ac)" stroke-width="2" points="${pt.map(x=>x.join(',')).join(' ')}"/>${pt.map(x=>`<circle cx="${x[0]}" cy="${x[1]}" r="3" fill="var(--ac)"/>`).join('')}</svg><small>טווח ${f1(mn)}–${f1(mx)}</small></div>`}
+return `<div class="c"><h2>${l} <span class="mu" style="font-weight:400;font-size:14px">ממוצע ${F(avg(vals))}${l==='שעות שינה'?'':u}</span></h2><svg viewBox="0 0 300 70" width="100%"><polyline fill="none" stroke="var(--ac)" stroke-width="2" points="${pt.map(x=>x.join(',')).join(' ')}"/>${pt.map(x=>`<circle cx="${x[0]}" cy="${x[1]}" r="3" fill="var(--ac)"/>`).join('')}</svg><small>טווח ${F(mn)}–${F(mx)}</small></div>`}
 function insights(){
 const out=[],W=['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
 const E=days.filter(d=>d.energy);if(E.length>=10){const b={};E.forEach(d=>{const w=new Date(d.date+'T12:00:00').getDay();(b[w]=b[w]||[]).push(d.energy)});const c=Object.entries(b).filter(x=>x[1].length>=2).map(x=>[x[0],avg(x[1])]).sort((a,b)=>b[1]-a[1])[0];if(c)out.push(`האנרגיה הגבוהה ביותר שדווחה בממוצע היא ביום ${W[c[0]]} (${f1(c[1])} מתוך 5).`)}
@@ -93,32 +138,66 @@ const sm=days.filter(d=>d.mood&&d.sleep&&d.sleep.dur!=null),a=sm.filter(d=>d.sle
 if(a.length>=3&&b.length>=3)out.push(`בימים עם 7 שעות שינה ומעלה מצב הרוח הממוצע היה ${f1(avg(a.map(d=>d.mood)))}, ובימים עם פחות שינה ${f1(avg(b.map(d=>d.mood)))}.`);
 const te=days.filter(d=>d.energy&&d.habits),t1=te.filter(d=>d.habits.str),t0=te.filter(d=>!d.habits.str);
 if(t1.length>=3&&t0.length>=3)out.push(`בימי אימון האנרגיה הממוצעת הייתה ${f1(avg(t1.map(d=>d.energy)))}, ובימים בלי אימון ${f1(avg(t0.map(d=>d.energy)))}.`);
-const hr=days.filter(d=>d.habits&&Object.keys(d.habits).length);if(hr.length>=7){const R=H.map(h=>[h[1],hr.filter(d=>d.habits[h[0]]).length/hr.length]).sort((x,y)=>y[1]-x[1]);out.push(`ההרגל שהכי עקבי אצלך: ${R[0][0]} (${Math.round(R[0][1]*100)}%).`);out.push(`ההרגל שיש בו הכי הרבה מקום לצמוח: ${R[R.length-1][0]} (${Math.round(R[R.length-1][1]*100)}%).`)}
+const hr=days.filter(d=>d.habits&&Object.keys(d.habits).length);if(hr.length>=7){const R=H.map(h=>[h[1],hr.filter(d=>d.habits[h[0]]).length/hr.length]).sort((x,y)=>y[1]-x[1]);out.push(`ההרגל שהכי עקבי אצלך: ${R[0][0]}.`);out.push(`ההרגל שיש בו הכי הרבה מקום לצמוח: ${R[R.length-1][0]}.`)}
+[['fcaf','קפאין אחר הצהריים'],['falc','אלכוהול'],['fscr','מסך לפני השינה'],['fmeal','ארוחה מאוחרת']].forEach(([k,l])=>{const q=days.filter(d=>d.sleep&&d.sleep.score!=null&&d.habits&&Object.keys(d.habits).length),y=q.filter(d=>d.habits[k]),n=q.filter(d=>!d.habits[k]);if(y.length>=3&&n.length>=3)out.push(`בלילות עם ${l} ה-Sleep Score הממוצע היה ${f1(avg(y.map(d=>d.sleep.score)))}, ובלילות בלי ${f1(avg(n.map(d=>d.sleep.score)))}.`)});
 return out}
+function chart(t,ds,S,o){o=o||{};const F=o.f||f1,W=320,Ht=130,L=34,R=8,T=8,B=18,n=ds.length,st=S.filter(x=>x.stack),all=[];
+S.forEach(x=>x.v.forEach((v,i)=>{if(v!=null)all.push(x.stack?st.reduce((a,y)=>a+(y.v[i]||0),0):v)}));
+if(o.tgt!=null)all.push(o.tgt);if(o.band)all.push(o.band[0],o.band[1]);
+if(!all.length)return `<div class="c"><h2>${t}</h2><p class="mu" style="margin:0">אין נתונים בטווח</p></div>`;
+let mn=o.min!=null?o.min:Math.min(...all),mx=o.max!=null?o.max:Math.max(...all);if(S.some(x=>x.bar)&&mn>0&&o.min==null)mn=0;if(mx<=mn)mx=mn+1;
+const pw=W-L-R,X=i=>L+(i+.5)/n*pw,Y=v=>T+(1-(v-mn)/(mx-mn))*(Ht-T-B),bw=Math.max(2,pw/n*.7),dl=d=>d.slice(8)+'/'+d.slice(5,7);let g='';
+if(o.band)g+=`<rect x="${L}" y="${Y(o.band[1])}" width="${pw}" height="${Math.max(1,Y(o.band[0])-Y(o.band[1]))}" fill="var(--ac)" opacity=".13"/>`;
+if(o.tgt!=null)g+=`<line x1="${L}" x2="${W-R}" y1="${Y(o.tgt)}" y2="${Y(o.tgt)}" stroke="var(--mu)" stroke-dasharray="4 3"/>`;
+const base=new Array(n).fill(0);
+S.forEach(x=>{if(x.bar)x.v.forEach((v,i)=>{if(v==null)return;const b=x.stack?base[i]:mn,e=x.stack?b+v:v;g+=`<rect x="${X(i)-bw/2}" y="${Y(e)}" width="${bw}" height="${Math.max(0,Y(b)-Y(e))}" fill="${x.c}" rx="1"/>`;if(x.stack)base[i]=e});
+else{const p=x.v.map((v,i)=>v==null?null:[X(i),Y(v)]).filter(Boolean);if(x.dots)g+=p.map(q=>`<circle cx="${q[0]}" cy="${q[1]}" r="2.5" fill="${x.c}" opacity=".5"/>`).join('');else g+=`<polyline fill="none" stroke="${x.c}" stroke-width="${x.w||2}" points="${p.map(q=>q.join(',')).join(' ')}"/>`+(n<=31?p.map(q=>`<circle cx="${q[0]}" cy="${q[1]}" r="2.5" fill="${x.c}"/>`).join(''):'')}});
+g+=ds.map((d,i)=>{const tip=S.map(x=>x.v[i]!=null?x.n+' '+F(x.v[i]):'').filter(Boolean).join(' · ');return tip?`<rect x="${X(i)-pw/n/2}" y="0" width="${pw/n}" height="${Ht}" fill="transparent" data-tip="${dl(d)}: ${tip}"/>`:''}).join('');
+g+=`<text x="2" y="${Y(mx)+8}" font-size="9" fill="var(--mu)">${F(mx)}</text><text x="2" y="${Y(mn)-2}" font-size="9" fill="var(--mu)">${F(mn)}</text><text x="${L}" y="${Ht-4}" font-size="9" fill="var(--mu)">${dl(ds[0])}</text><text x="${W-R}" y="${Ht-4}" font-size="9" fill="var(--mu)" text-anchor="end">${dl(ds[n-1])}</text>`;
+return `<div class="c"><h2>${t}${o.sub?` <span class="mu" style="font-weight:400;font-size:14px">${o.sub}</span>`:''}</h2><svg viewBox="0 0 ${W} ${Ht}" width="100%" style="direction:ltr;display:block">${g}</svg><small>${S.filter(x=>x.n&&!x.dots||x.dots).map(x=>`<span style="color:${x.c}">● ${x.n}</span>`).join(' ')}${o.tgt!=null?' · קו מקווקו: '+F(o.tgt):''}${o.band?' · אזור מוצל: הטווח הרגיל שלך (30 יום)':''}</small><small class="tip">לחצו על נקודה לערך מדויק</small></div>`}
+function scat(rows){const p=rows.filter(d=>d.sleep&&d.sleep.dur!=null&&d.mood).map(d=>[d.sleep.dur,d.mood,d.date]);
+if(p.length<5)return '<div class="c"><h2>שינה מול מצב רוח</h2><p class="mu" style="margin:0">צריך לפחות 5 ימים עם שני הנתונים.</p></div>';
+const a=Math.min(...p.map(q=>q[0])),b=Math.max(...p.map(q=>q[0])),X=v=>34+(v-a)/((b-a)||1)*270,Y=v=>10+(5-v)/4*95;
+return `<div class="c"><h2>שינה מול מצב רוח</h2><svg viewBox="0 0 320 130" width="100%" style="direction:ltr;display:block">${p.map(q=>`<circle cx="${X(q[0])}" cy="${Y(q[1])}" r="6" fill="var(--ac)" opacity=".5" data-tip="${q[2].slice(8)}/${q[2].slice(5,7)}: שינה ${fdur(q[0])} · מצב רוח ${q[1]}"/>`).join('')}<text x="2" y="14" font-size="9" fill="var(--mu)">5</text><text x="2" y="108" font-size="9" fill="var(--mu)">1</text><text x="34" y="124" font-size="9" fill="var(--mu)">${fdur(a)}</text><text x="304" y="124" font-size="9" fill="var(--mu)" text-anchor="end">${fdur(b)}</text></svg><small class="tip">כל נקודה היא יום. לחצו לערך מדויק.</small><small>זו התאמה בלבד ואינה מוכיחה סיבה ותוצאה.</small></div>`}
 function vStats(){
 const end=ymd(),ds=[];for(let i=rng-1;i>=0;i--)ds.push(addD(end,-i));
 const m=Object.fromEntries(days.map(d=>[d.date,d])),rows=ds.map(d=>m[d]).filter(Boolean),S=k=>rows.map(d=>d.sleep&&d.sleep[k]);
-const hr=rows.filter(d=>Object.keys(d.habits||{}).length),cnt=id=>rows.filter(d=>d.habits&&d.habits[id]).length;
-const comp=avg(hr.map(d=>H.filter(h=>d.habits[h[0]]).length/H.length*100)),ser=f=>ds.map(d=>m[d]?f(m[d]):null);
-const K=(l,v)=>`<div class="k">${l}<b>${v}</b></div>`;
+const cnt=id=>rows.filter(d=>d.habits&&d.habits[id]).length,ser=f=>ds.map(d=>m[d]?f(m[d]):null),sv=k=>ser(d=>d.sleep&&d.sleep[k]!=null?d.sleep[k]:null);
+const ma=(v,k)=>v.map((_,i)=>{const w=v.slice(Math.max(0,i-k+1),i+1).filter(x=>x!=null);return w.length?avg(w):null});
+const bs=g=>{const a=days.filter(d=>d.date>addD(end,-30)).map(g).filter(v=>v!=null);if(a.length<7)return null;const mu=avg(a);return[mu-Math.sqrt(avg(a.map(v=>(v-mu)**2))),mu+Math.sqrt(avg(a.map(v=>(v-mu)**2)))]};
+const tm=x=>{if(!x)return null;const q=x.split(':').map(Number);return q[0]*60+q[1]},fm=v=>{v=Math.round(v)%1440;return String(Math.floor(v/60)).padStart(2,'0')+':'+String(v%60).padStart(2,'0')};
+const bed=ser(d=>{const v=tm(d.sleep&&d.sleep.bed);return v==null?null:v<720?v+1440:v}),wake=ser(d=>tm(d.sleep&&d.sleep.wake));
+const sdv=a=>{a=a.filter(x=>x!=null);if(a.length<3)return null;const mu=avg(a);return Math.sqrt(avg(a.map(x=>(x-mu)**2)))},sb=sdv(bed);
+const K=(l,v)=>`<div class="k">${l}<b>${v}</b></div>`,ln=(n,v,c,o)=>Object.assign({n,v,c},o||{}),sc=sv('score'),rh=sv('rhr'),hv=sv('hrv');
+const RB=[[7,'שבוע'],[30,'חודש'],[90,'3 חודשים'],[365,'שנה']].map(r=>`<button class="${rng===r[0]?'':'s'}" data-a="rng" data-v="${r[0]}">${r[1]}</button>`).join('');
 const ins=insights();
-return `<h1>סטטיסטיקות</h1><div class="r" style="margin-bottom:12px"><button class="${rng===7?'':'s'}" data-a="rng" data-v="7">שבוע</button><button class="${rng===30?'':'s'}" data-a="rng" data-v="30">חודש</button></div>
+return `<h1>סטטיסטיקות</h1><div class="r" style="margin-bottom:12px">${RB}</div>
 ${rows.length?'':'<div class="c"><p class="mu">אין עדיין נתונים בטווח. מלאו כמה ימים וכאן יופיעו סיכומים.</p></div>'}
-<div class="c"><h2>סיכום (${rows.length} ימים מתועדים)</h2><div class="g">${K('שינה (ש׳)',f1(avg(S('dur'))))}${K('Sleep Score',f1(avg(S('score'))))}${K('דופק מנוחה',f1(avg(S('rhr'))))}${K('HRV',f1(avg(S('hrv'))))}${K('מצב רוח',f1(avg(rows.map(d=>d.mood))))}${K('אנרגיה',f1(avg(rows.map(d=>d.energy))))}${K('לחץ',f1(avg(rows.map(d=>d.stress))))}${K('השלמת הרגלים',comp==null?'—':Math.round(comp)+'%')}${K('ימי אימון',cnt('str'))}${K('פעילות',rows.filter(d=>d.habits&&(d.habits.walk||d.habits.str)||d.special).length)}${K('מפגשים חברתיים',cnt('soc'))}${K('מדיטציה / קריאה',cnt('med')+' / '+cnt('read'))}</div></div>
-${spark('שעות שינה',ser(d=>d.sleep&&d.sleep.dur),' ש׳')}${spark('Sleep Score',ser(d=>d.sleep&&d.sleep.score),'')}${spark('מצב רוח',ser(d=>d.mood),'')}${spark('אנרגיה',ser(d=>d.energy),'')}${spark('לחץ',ser(d=>d.stress),'')}${spark('משקל',ser(d=>d.weight),' ק״ג')}
-<div class="c"><h2>אחוז הצלחה בכל הרגל</h2>${H.map(h=>{const p=hr.length?Math.round(cnt(h[0])/hr.length*100):0;return `<div style="margin-top:8px">${h[1]} <span class="mu">${p}%</span><div class="pb"><i style="width:${p}%"></i></div></div>`}).join('')}</div>
+${coach()}
+<div class="c"><h2>סיכום (${rows.length} ימים מתועדים)</h2><div class="g">${K('שינה ממוצעת',fdur(avg(S('dur')))||'—')}${K('Sleep Score',f1(avg(S('score'))))}${K('דופק מנוחה',f1(avg(S('rhr'))))}${K('HRV',f1(avg(S('hrv'))))}${K('BB עלייה בלילה',f1(avg(S('bb'))))}${K('BB ערך בוקר',f1(avg(S('bb0'))))}${K('מצב רוח',f1(avg(rows.map(d=>d.mood))))}${K('אנרגיה',f1(avg(rows.map(d=>d.energy))))}${K('לחץ',f1(avg(rows.map(d=>d.stress))))}${K('סטיית שעת שינה',sb==null?'—':Math.round(sb)+' דק׳')}</div></div>
+${chart('שעות שינה',ds,[ln('שינה',sv('dur'),'#3f7f7a',{bar:1})],{f:fdur,tgt:7,band:bs(d=>d.sleep&&d.sleep.dur)})}
+${chart('Sleep Score',ds,[ln('יומי',sc,'#8a9d9a',{dots:1}),ln('ממוצע 7 ימים',ma(sc,7),'#3f7f7a',{w:3})],{band:bs(d=>d.sleep&&d.sleep.score)})}
+${chart('שינה עמוקה ו-REM (דקות)',ds,[ln('עמוקה',sv('deep'),'#3f7f7a',{bar:1,stack:1}),ln('REM',sv('rem'),'#8aa9d6',{bar:1,stack:1})])}
+${chart('עקביות שינה: שעת שינה וקימה',ds,[ln('שעת שינה',bed,'#8aa9d6'),ln('שעת קימה',wake,'#d6a24a')],{f:fm,sub:sb==null?'':'סטיית שעת שינה '+Math.round(sb)+' דק׳'})}
+${chart('דופק מנוחה',ds,[ln('יומי',rh,'#8a9d9a',{dots:1}),ln('ממוצע 7 ימים',ma(rh,7),'#c4685a',{w:3})],{band:bs(d=>d.sleep&&d.sleep.rhr)})}
+${chart('HRV',ds,[ln('יומי',hv,'#8a9d9a',{dots:1}),ln('ממוצע 7 ימים',ma(hv,7),'#6a8fc4',{w:3})],{band:bs(d=>d.sleep&&d.sleep.hrv)})}
+${chart('Body Battery',ds,[ln('עלייה בלילה',sv('bb'),'#d6a24a'),ln('ערך בוקר',sv('bb0'),'#3f7f7a')])}
+${chart('מצב רוח, אנרגיה ולחץ',ds,[ln('מצב רוח',ser(d=>d.mood),'#3f7f7a'),ln('אנרגיה',ser(d=>d.energy),'#d6a24a'),ln('לחץ',ser(d=>d.stress),'#c4685a')],{min:1,max:5})}
+${chart('משקל (ק״ג)',ds,[ln('משקל',ser(d=>d.weight),'#3f7f7a')])}
+${scat(rows)}
+<div class="c"><h2>ימים בטווח</h2><div class="g">${K('ימי אימון',cnt('str'))}${K('הליכה / פעילות',cnt('walk'))}${K('תרגילי גב',cnt('back'))}${K('מדיטציה',cnt('med'))}${K('קריאה',cnt('read'))}${K('מפגשים חברתיים',cnt('soc'))}${K('דברים חדשים',cnt('new'))}${K('עשיתי משהו שדחיתי',cnt('dodge'))}${tasks().map(x=>K(esc(x.name),cnt(x.id))).join('')}</div><small>מספר ימים בלבד, בלי ציון.</small></div>
 <div class="c"><h2>תובנות</h2>${ins.length?'<ul>'+ins.map(x=>`<li>${x}</li>`).join('')+'</ul>':'<p class="mu">התובנות יופיעו אחרי שיצטברו מספיק ימים (בערך שבוע עד שבועיים).</p>'}<small>אלה התאמות בנתונים שלך בלבד. הן לא מוכיחות סיבה ותוצאה, ואינן אבחנה רפואית.</small></div>`}
 function vGoals(){
 const g=eg||{},sg=eg&&eg.id;
 return `<h1>מטרות</h1><div class="c"><h2>${sg?'עריכת מטרה':'מטרה חדשה'}</h2><label>שם<input id="gn" value="${esc(g.name)}"></label><label style="margin-top:8px">תיאור<input id="gd" value="${esc(g.desc)}"></label>
 <div class="g" style="margin-top:8px"><label>יעד מדיד (מספר)<input id="gt" type="number" inputmode="decimal" step="any" value="${g.target!=null?g.target:''}"></label><label>יחידה (ק״ג, אימונים…)<input id="gu" value="${esc(g.unit)}"></label></div>
-<label style="margin-top:8px">תאריך יעד (אופציונלי)<input id="gx" type="date" value="${g.due||''}"></label><div class="r" style="margin-top:10px"><button data-a="gsave">${sg?'שמור שינויים':'הוסף מטרה'}</button>${sg?'<button class="s" data-a="gcancel">ביטול</button>':''}</div>
+<label style="margin-top:8px">תאריך יעד (אופציונלי)<input id="gx" type="date" value="${g.due||''}"></label><label style="margin-top:8px">טווח<select id="gh">${Object.entries(HZ).map(([k,v])=>`<option value="${k}" ${(g.hz||'d30')===k?'selected':''}>${v}</option>`).join('')}</select></label><div class="r" style="margin-top:10px"><button data-a="gsave">${sg?'שמור שינויים':'הוסף מטרה'}</button>${sg?'<button class="s" data-a="gcancel">ביטול</button>':''}</div>
 <small>למשל "ירידה של 4.5 ק״ג": הגדירו יעד 4.5 ועדכנו כמה כבר הושג. אפשר לשנות מטרה בכל שלב.</small></div>
-${goals.length?goals.map(x=>{const p=x.target?Math.min(100,Math.round((x.current||0)/x.target*100)):0;return `<div class="c"><b>${esc(x.name)}</b><div class="mu">${esc(x.desc)}</div><div class="pb"><i style="width:${p}%"></i></div><div>${f1(x.current||0)} מתוך ${f1(x.target)} ${esc(x.unit)} (${p}%)${x.due?' · עד '+x.due:''}</div><small>${p>=100?'השגת את המטרה. כל הכבוד!':p>0?'יש התקדמות, וזה מה שחשוב.':'כל התחלה נחשבת.'}</small>
+${goals.filter(x=>x.kind!=='task').length?goals.filter(x=>x.kind!=='task').map(x=>{const p=x.target?Math.min(100,Math.round((x.current||0)/x.target*100)):0;return `<div class="c"><b>${esc(x.name)}</b><div class="mu">${esc(x.desc)}</div><div class="pb"><i style="width:${p}%"></i></div><div>${f1(x.current||0)} מתוך ${f1(x.target)} ${esc(x.unit)} (${p}%)${x.hz?' · '+HZ[x.hz]:''}${x.due?' · עד '+x.due:''}</div><small>${p>=100?'השגת את המטרה. כל הכבוד!':p>0?'יש התקדמות, וזה מה שחשוב.':'כל התחלה נחשבת.'}</small>
 <div class="r" style="margin-top:8px"><button data-a="gup" data-v="${x.id}">עדכון התקדמות</button><button class="s" data-a="gedit" data-v="${x.id}">עריכה</button><button class="d" data-a="gdel" data-v="${x.id}">מחיקה</button></div></div>`}).join(''):'<div class="c"><p class="mu">עדיין אין מטרות. הוסיפו אחת למעלה.</p></div>'}`}
 function vSet(){
 const th=(()=>{try{return localStorage.getItem('lt-theme')||'auto'}catch(e){return'auto'}})();
-return `<h1>הגדרות וגיבוי</h1><div class="c"><h2>גיבוי</h2><p class="mu" style="margin-top:0">${days.length} ימים ו-${goals.length} מטרות שמורים במכשיר הזה. גיבוי אחרון: ${meta.lastBackup?new Date(meta.lastBackup).toLocaleDateString('he-IL'):'טרם בוצע'}.</p>
+return `<h1>הגדרות וגיבוי</h1><div class="c"><h2>גיבוי</h2><p class="mu" style="margin-top:0">${days.length} ימים ו-${goals.filter(x=>x.kind!=='task').length} מטרות ו-${tasks().length} משימות שמורים במכשיר הזה. גיבוי אחרון: ${meta.lastBackup?new Date(meta.lastBackup).toLocaleDateString('he-IL'):'טרם בוצע'}.</p>
 <button data-a="exp" style="width:100%">הורדת גיבוי מלא (JSON)</button>
 <label class="s" style="display:block;margin-top:10px;padding:12px;border-radius:12px;background:var(--a2);text-align:center;color:var(--tx)">ייבוא ומיזוג מקובץ גיבוי<input type="file" accept=".json,application/json" data-imp="merge" hidden></label>
 <label style="display:block;margin-top:10px;padding:12px;border-radius:12px;border:1px solid var(--er);text-align:center;color:var(--er)">שחזור מלא (מחליף את כל הנתונים)<input type="file" accept=".json,application/json" data-imp="replace" hidden></label>
@@ -138,17 +217,21 @@ function render(){const v={today:vToday,hist:vHist,stats:vStats,goals:vGoals,set
 $('#nv').innerHTML=[['today','◐','היום'],['hist','▤','היסטוריה'],['stats','▥','סטטיסטיקות'],['goals','◎','מטרות'],['set','⚙','הגדרות']].map(x=>`<button data-tab="${x[0]}" class="${tab===x[0]?'on':''}"><b>${x[1]}</b>${x[2]}</button>`).join('');
 if(tab==='set')(async()=>{let p=false;try{p=await navigator.storage.persisted()}catch(e){}$('#ps').textContent=p?'האחסון מוגן מפני מחיקה אוטומטית.':'האחסון אינו מסומן כקבוע. התקינו את האפליקציה במסך הבית וגבו באופן קבוע.'})()}
 const A=$('#app');
-A.addEventListener('input',e=>{const t=e.target,D=t.dataset;if(D.s!==undefined){rec.sleep=rec.sleep||{};rec.sleep[D.s]=D.s==='note'?t.value:num(t.value);sched()}else if(D.f){rec[D.f]=t.type==='number'?num(t.value):t.value;sched()}});
-A.addEventListener('change',e=>{const t=e.target,D=t.dataset;if(D.h){rec.habits[D.h]=t.checked;sched()}else if(t.id==='dp'&&t.value)go(t.value);else if(t.id==='hm'){hm=t.value;render()}else if(t.id==='hdq'){hd=t.value;render()}else if(t.id==='th')setTheme(t.value);else if(D.imp){doImport(t.files[0],D.imp);t.value=''}});
-A.addEventListener('click',async e=>{const sb=e.target.closest('.sc button');if(sb){const k=sb.parentNode.dataset.sc,n=+sb.dataset.n;rec[k]=rec[k]===n?null:n;sb.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',+b.dataset.n===rec[k]));sched();return}
+A.addEventListener('input',e=>{const t=e.target,D=t.dataset;if(D.s!==undefined){if(D.s==='dur')return;rec.sleep=rec.sleep||{};rec.sleep[D.s]=(D.s==='note'||D.s==='bed'||D.s==='wake')?t.value:num(t.value);sched()}else if(D.f){rec[D.f]=t.type==='number'?num(t.value):t.value;sched()}});
+A.addEventListener('change',e=>{const t=e.target,D=t.dataset;if(D.h){rec.habits[D.h]=t.checked;sched();if(ts==='t'){const b=document.querySelector('[data-v="t"]');if(b)b.textContent='משימות '+tk()}}else if(D.tn){const x=goals.find(g=>g.id===D.tn),n=t.value.trim();if(x&&n){x.name=n;x.updatedAt=Date.now();put('goals',x).then(()=>LT.sched()).catch(er=>toast('השמירה נכשלה: '+er.message,1))}}else if(D.s==='dur'){const v=pdur(t.value);if(Number.isNaN(v)){toast('כתבו שעות ודקות כך: 5:25 (דקות בשתי ספרות)',1);return}rec.sleep=rec.sleep||{};rec.sleep.dur=v;t.value=fdur(v);sched()}else if(t.id==='dp'&&t.value)go(t.value);else if(t.id==='hm'){hm=t.value;render()}else if(t.id==='hdq'){hd=t.value;render()}else if(t.id==='hq'){hq=t.value;render()}else if(t.id==='th')setTheme(t.value);else if(D.imp){doImport(t.files[0],D.imp);t.value=''}});
+A.addEventListener('click',async e=>{const tp=e.target.closest('[data-tip]');if(tp){const c=tp.closest('.c').querySelector('.tip');if(c)c.textContent=tp.dataset.tip;return}const sb=e.target.closest('.sc button');if(sb){const k=sb.parentNode.dataset.sc,n=+sb.dataset.n;rec[k]=rec[k]===n?null:n;sb.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',+b.dataset.n===rec[k]));sched();return}
 const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,v=b.dataset.v;
 if(a==='prev')go(addD(cur,-1));else if(a==='next')go(addD(cur,1));else if(a==='open')go(v);
 else if(a==='tstart'){if(tI){clearInterval(tI);tI=null;tL=Math.max(0,Math.round((tE-Date.now())/1000))}else{tE=Date.now()+tL*1000;tI=setInterval(tick,250)}render()}
 else if(a==='treset'){clearInterval(tI);tI=null;tL=600;render()}
-else if(a==='clr'){hm='';hd='';render()}
+else if(a==='clr'){hm='';hd='';hq='';render()}
 else if(a==='delday'){if(confirm('למחוק את היום '+fd(v)+' לצמיתות? אי אפשר לשחזר, אלא מגיבוי.')){try{await del('days',v);await LT.tomb('day',v);days=days.filter(d=>d.date!==v);LT.sched();if(cur===v)rec=blank(v);toast('היום נמחק');render()}catch(er){toast('המחיקה נכשלה: '+er.message,1)}}}
-else if(a==='rng'){rng=+v;render()}
-else if(a==='gsave'){const n=$('#gn').value.trim();if(!n){toast('יש להזין שם למטרה',1);return}const o=eg&&eg.id?eg:{id:'g'+Date.now(),current:0};Object.assign(o,{name:n,desc:$('#gd').value.trim(),target:num($('#gt').value),unit:$('#gu').value.trim(),due:$('#gx').value||null,updatedAt:Date.now()});try{await put('goals',o);LT.sched();if(!goals.find(x=>x.id===o.id))goals.push(o);eg=null;toast('המטרה נשמרה');render()}catch(er){toast('השמירה נכשלה: '+er.message,1)}}
+else if(a==='rng'){rng=+v;render()}else if(a==='ts'){ts=v;render()}
+else if(a==='ted'){te=!te;render()}
+else if(a==='tadd'){const n=$('#tnew').value.trim();if(!n){toast('כתבו שם למשימה',1);return}const o={id:'t'+Date.now(),kind:'task',name:n,order:Math.max(0,...tasks().map(x=>x.order||0))+1,updatedAt:Date.now()};try{await put('goals',o);goals.push(o);LT.sched();render()}catch(er){toast('השמירה נכשלה: '+er.message,1)}}
+else if(a==='tup'||a==='tdn'){const t=tasks(),i=t.findIndex(x=>x.id===v),j=a==='tup'?i-1:i+1;if(i<0||j<0||j>=t.length)return;const x=t[i],y=t[j],o=x.order;x.order=y.order;y.order=o;x.updatedAt=y.updatedAt=Date.now();try{await put('goals',x);await put('goals',y);LT.sched();render()}catch(er){toast('השמירה נכשלה: '+er.message,1)}}
+else if(a==='tdel'){const x=goals.find(g=>g.id===v);if(x&&confirm('למחוק את המשימה "'+x.name+'"? סימוני העבר שלה יישארו בנתונים אך לא יוצגו.')){try{await del('goals',v);await LT.tomb('goal',v);goals=goals.filter(g=>g.id!==v);LT.sched();render()}catch(er){toast('המחיקה נכשלה: '+er.message,1)}}}
+else if(a==='gsave'){const n=$('#gn').value.trim();if(!n){toast('יש להזין שם למטרה',1);return}const o=eg&&eg.id?eg:{id:'g'+Date.now(),current:0};Object.assign(o,{name:n,desc:$('#gd').value.trim(),target:num($('#gt').value),unit:$('#gu').value.trim(),due:$('#gx').value||null,hz:$('#gh').value,updatedAt:Date.now()});try{await put('goals',o);LT.sched();if(!goals.find(x=>x.id===o.id))goals.push(o);eg=null;toast('המטרה נשמרה');render()}catch(er){toast('השמירה נכשלה: '+er.message,1)}}
 else if(a==='gcancel'){eg=null;render()}
 else if(a==='gedit'){eg=Object.assign({},goals.find(x=>x.id===v));render();scrollTo(0,0)}
 else if(a==='gup'){const o=goals.find(x=>x.id===v),r=prompt('כמה הושג עד עכשיו? ('+(o.unit||'ערך')+')',o.current||0);if(r===null||isNaN(+r)||r.trim()==='')return;o.current=+r;o.updatedAt=Date.now();try{await put('goals',o);LT.sched();render()}catch(er){toast('השמירה נכשלה: '+er.message,1)}}
